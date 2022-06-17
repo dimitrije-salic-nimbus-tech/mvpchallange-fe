@@ -1,52 +1,43 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import Button from "../../../components/Button/Button";
+
+import Button from '../../../components/Button/Button';
+import { getCognitoLoginUrl } from '../../../store/thunks/auth/GetCognitoLoginUrl';
+import { StoreState } from '../../../store';
+import { PromiseState } from '../../../store/slices/promise/types';
+import { getCognitoUrlAction } from '../../../store/slices/cognito/actions';
+import { PromiseResult } from '../../../shared/types/PromiseResult';
+import { reset } from '../../../store/slices/promise/actions';
 
 const Login = () => {
-    const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { fulfilled } = useSelector<StoreState, PromiseState>((state) => state.promise);
 
-    // const loginHandler = async () => {
-    //     const { data }  = await getCognitnoUrl();
-    //     const { cognitoLoginUri}  = data;
-    //     if(cognitoLoginUri){
-    //         window.open(cognitoLoginUri, '_self')
-    //     }
-    // }
+  const loginHandler = async () => {
+    dispatch(getCognitoLoginUrl());
+  };
 
-    const loginHandler = () => {
-        console.log(123)
-        navigate('/products');
-    };
+  useEffect(() => {
+    const fulfilledGetCognitoUrl = fulfilled.getItem(getCognitoUrlAction) as PromiseResult;
+    if (fulfilledGetCognitoUrl) {
+      window.open(fulfilledGetCognitoUrl.data.cognitoLoginUri, '_self');
+      dispatch(reset(getCognitoUrlAction));
+    }
+  }, [fulfilled]);
 
-    return (
-        <AuthContainer>
-            <Button label='Login' onClick={() => loginHandler()}/>
-        </AuthContainer>
-    );
+  return (
+    <AuthContainer>
+      <Button label="Login" onClick={() => loginHandler()} />
+    </AuthContainer>
+  );
 };
-
-const AuthButton = styled(Button)`
-  height: 3rem;
-  width: 5rem;
-  border: 1px solid black;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-`;
 
 const AuthContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-`
+`;
 
 export default Login;

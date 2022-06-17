@@ -8,7 +8,8 @@ import { StoreState } from '../../../../store';
 import { PromiseState } from '../../../../store/slices/promise/types';
 import { fetchProductAction } from '../../../../store/slices/product/actions';
 import { PromiseResult } from '../../../../shared/types/PromiseResult';
-import { FullProductResponse } from '../../../../shared/types/Response/FullProductResponse';
+import { FullProductResponse } from '../../../../shared/types/response/FullProductResponse';
+import {reset} from "../../../../store/slices/promise/actions";
 
 const Product: FC = () => {
   const [product, setProduct] = useState<FullProductResponse>();
@@ -25,10 +26,9 @@ const Product: FC = () => {
     if (fulfilledFetch) {
       const response: FullProductResponse = fulfilledFetch.data;
       setProduct(response);
+      dispatch(reset(fetchProductAction))
     }
   }, [fulfilled]);
-
-  console.log(product);
 
   return (
     <div>

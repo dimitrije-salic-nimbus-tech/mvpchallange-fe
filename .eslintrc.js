@@ -23,8 +23,7 @@ module.exports = {
     'no-use-before-define': 0,
     'arrow-body-style': 0,
     'no-shadow': 0,
-    'no-unused-vars': 1,
-    'object-curly-newline': 1,
+    'object-curly-newline': 0,
     'jsx-a11y/anchor-is-valid': 0,
     'jsx-a11y/no-static-element-interactions': 0,
     'jsx-a11y/click-events-have-key-events': 0,
@@ -39,5 +38,6 @@ module.exports = {
     'react/require-default-props': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'react/no-array-index-key': 0,
+    'no-unused-vars': 0,
   },
 };

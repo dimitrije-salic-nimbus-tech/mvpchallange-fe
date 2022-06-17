@@ -7,6 +7,7 @@ import { pend, fulFill } from '../../slices/promise/actions';
 import { deleteProductAction } from '../../slices/product/actions';
 import { errorHttpHandler, MvpMatchHttpError } from '../../../utils/errorHttpHandler';
 import { deleteProductRequest } from '../../../service/api/Product/ProductService';
+import {fetchProducts} from "./FetchProducts";
 
 export const deleteProduct: AsyncMiddleware<StoreState, APIActions> =
   (id: string) => async (dispatch: Dispatch, _: () => StoreState) => {
@@ -14,6 +15,8 @@ export const deleteProduct: AsyncMiddleware<StoreState, APIActions> =
       dispatch(pend(deleteProductAction));
       const response = await deleteProductRequest(id);
       dispatch(fulFill(deleteProductAction, response));
+        // @ts-ignore
+        dispatch(fetchProducts(0));
     } catch (error) {
       errorHttpHandler(deleteProductAction, error as MvpMatchHttpError, dispatch);
     }

@@ -7,6 +7,7 @@ import { pend, fulFill } from '../../slices/promise/actions';
 import { errorHttpHandler, MvpMatchHttpError } from '../../../utils/errorHttpHandler';
 import { resetDepositAction } from '../../slices/user/actions';
 import { resetDepositRequest } from '../../../service/api/User/UserService';
+import {setUserAction} from "../../slices/auth/actions";
 
 export const resetDeposit: AsyncMiddleware<StoreState, APIActions> =
   (id: string) => async (dispatch: Dispatch, _: () => StoreState) => {
@@ -14,6 +15,7 @@ export const resetDeposit: AsyncMiddleware<StoreState, APIActions> =
       dispatch(pend(resetDepositAction));
       const response = await resetDepositRequest(id);
       dispatch(fulFill(resetDepositAction, response));
+      dispatch(setUserAction(response))
     } catch (error) {
       errorHttpHandler(resetDepositAction, error as MvpMatchHttpError, dispatch);
     }

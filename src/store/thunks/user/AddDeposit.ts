@@ -8,6 +8,7 @@ import { errorHttpHandler, MvpMatchHttpError } from '../../../utils/errorHttpHan
 import { addDepositAction } from '../../slices/user/actions';
 import { addDepositRequest } from '../../../service/api/User/UserService';
 import { ChangeDepositRequest } from '../../../shared/types/request/ChangeDepositRequest';
+import {setUserAction} from "../../slices/auth/actions";
 
 export const addDeposit: AsyncMiddleware<StoreState, APIActions> =
   (id: string, request: ChangeDepositRequest) => async (dispatch: Dispatch, _: () => StoreState) => {
@@ -15,6 +16,7 @@ export const addDeposit: AsyncMiddleware<StoreState, APIActions> =
       dispatch(pend(addDepositAction));
       const response = await addDepositRequest(id, request);
       dispatch(fulFill(addDepositAction, response));
+        dispatch(setUserAction(response))
     } catch (error) {
       errorHttpHandler(addDepositAction, error as MvpMatchHttpError, dispatch);
     }

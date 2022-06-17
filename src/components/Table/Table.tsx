@@ -1,61 +1,46 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 
-import { ProductResponse } from '../../shared/types/Response/ProductResponse';
-
 type Props = {
-  products: ProductResponse[];
-    onClick?: (id:any) => void;
+  data: any[];
+  renderHeader: () => ReactNode;
+  renderRow: (item: any & { id: string }) => ReactNode;
 };
-
-const Table: FC<Props> = ({ products, onClick }) => {
+const Table: FC<Props> = ({ data, renderRow, renderHeader }) => {
   return (
     <TableContainer>
-      <TableColumn>
-        <TableHead>Name</TableHead>
-        <TableHead>Current Price</TableHead>
-        <TableHead>Available amount</TableHead>
-      </TableColumn>
-      {products?.map((product: ProductResponse) => {
-        return (
-          <TableColumn key={product.id} onClick={()=> onClick ? onClick(product.id) :onClick}>
-            <TableField>{product.name}</TableField>
-            <TableField>{product.currentPrice}</TableField>
-            <TableField>{product.amountAvailable}</TableField>
-          </TableColumn>
-        );
+      <TableColumn>{renderHeader()}</TableColumn>
+      {data?.map((item: any & { id: string }) => {
+        return <TableColumn key={item.id}>{renderRow(item)}</TableColumn>;
       })}
     </TableContainer>
   );
 };
-
 export default Table;
-
-const TableContainer = styled.div`
+const TableContainer = styled.tbody`
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 `;
-
-const TableHead = styled.th`
+export const TableHead = styled.th`
   border: 1px solid #ddd;
   padding: 8px;
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #04aa6d;
+  background-color: #1941af;
   color: white;
 `;
-
-const TableField = styled.td`
+export const TableField = styled.td`
   border: 1px solid #ddd;
   padding: 8px;
+  font-size: 1.5rem;
+  text-align: center;
 `;
 const TableColumn = styled.tr`
   &:nth-child(even) {
     background-color: #f2f2f2;
   }
-
   &:hover {
     background-color: #ddd;
   }
