@@ -21,6 +21,12 @@ $ nvm install v16.13.0
 $ nvm use
 ```
 
+- Set up env
+
+```
+$ cp .env.example .env
+```
+
 ### Run locally
 
 - Run server
